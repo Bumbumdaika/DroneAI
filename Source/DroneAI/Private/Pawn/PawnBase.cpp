@@ -2,7 +2,9 @@
 
 
 #include "Pawn/PawnBase.h"
-
+#include "Components/SphereComponent.h"
+#include "Components/StaticMeshCOmponent.h"
+#include "GameFramework/FloatingPawnMovement.h"
 
 // Sets default values
 APawnBase::APawnBase()
@@ -10,8 +12,30 @@ APawnBase::APawnBase()
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	
-	SM_Drone = CreateDefaultSubobject<UStaticMeshComponent>("SM_Drone");
+	/*Create collision component Используется как RootComponent*/
+	CollisionComponent = CreateDefaultSubobject<USphereComponent>(TEXT("CollisionComponent"));
+	SetRootComponent(CollisionComponent);
+	CollisionComponent->SetSphereRadius(50.f);
+	CollisionComponent->SetCollisionProfileName(TEXT("Pawn"));
 	
+	
+	/*
+	Create mesh component
+	Визуальное представление Pawn
+	*/
+	MeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComponent"));
+	MeshComponent->SetupAttachment(RootComponent);
+	
+	/*
+	Create movement component
+	Позволяет Pawn двигаться в пространстве
+	*/
+	MovementComponent = CreateDefaultSubobject<UFloatingPawnMovement>(TEXT("MovementComponent"));
+
+	/*
+	Allow AI controller to possess pawn automatically
+	*/
+	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 }
 
 // Called when the game starts or when spawned
