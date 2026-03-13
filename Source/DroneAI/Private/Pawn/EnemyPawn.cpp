@@ -6,3 +6,12 @@
 
 
 
+AEnemyPawn::AEnemyPawn()
+{
+	PrimaryActorTick.bCanEverTick = true;
+}
+
+void AEnemyPawn::BeginPlay()
+{
+	Super::BeginPlay();
+}
