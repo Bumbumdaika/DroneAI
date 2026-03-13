@@ -25,19 +25,24 @@ class DRONEAI_API APlayerPawn : public APawnBase
 public:
 	APlayerPawn();
 
+	UFUNCTION(Server, Reliable)
+	void Server_Move(const FVector& Direction, float Scale);
+	
 protected:
 	virtual void BeginPlay() override;
+	// Функция биндинга input
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 	
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	TObjectPtr<USpringArmComponent> SpringArmComponent;
 	// TObjectPtr<USpringArmComponent> — держатель камеры на расстоянии от Pawn
-
+	// Камера на "палке" для плавного следования
+	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	TObjectPtr<UCameraComponent> CameraComponent;
 	// TObjectPtr<UCameraComponent> — камера игрока
-
+	// Основная камера игрока
 protected:                              
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Inputs")
@@ -59,6 +64,6 @@ protected:
 protected:
 	void Move(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
-	void MoveuUp(const FInputActionValue& Value);
+	void MoveUp(const FInputActionValue& Value);
 	
 };
