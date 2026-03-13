@@ -23,6 +23,7 @@ protected:
 	virtual void BeginPlay() override;
 	
 public:
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "AI")
 	float DetectionRadius = 1500.f;
 	// float — дистанция обнаружения цели
