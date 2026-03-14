@@ -31,8 +31,8 @@ protected:
 	TObjectPtr<UBehaviorTree> BehaviorTreeAsset;
 	// TObjectPtr<UBehaviorTree> — ссылка на Behavior Tree asset, который запускает ИИ
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "AI")
-	TObjectPtr<UBehaviorTreeComponent> BehaviorTreeComponentRef;
+//	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "AI")
+//	TObjectPtr<UBehaviorTreeComponent> BehaviorTreeComponentRef;
 	// TObjectPtr<UBehaviorTreeComponent> — компонент, который исполняет дерево поведения
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "AI")
