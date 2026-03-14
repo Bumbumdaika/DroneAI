@@ -6,6 +6,7 @@
 #include "AIController.h"
 #include "DroneAIController.generated.h"
 
+struct FAIStimulus;
 /**
  * 
  */
@@ -31,14 +32,17 @@ protected:
 	TObjectPtr<UBehaviorTree> BehaviorTreeAsset;
 	// TObjectPtr<UBehaviorTree> — ссылка на Behavior Tree asset, который запускает ИИ
 
-//	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "AI")
-//	TObjectPtr<UBehaviorTreeComponent> BehaviorTreeComponentRef;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "AI")
+	TObjectPtr<UBehaviorTreeComponent> BehaviorTreeComponentRef;
 	// TObjectPtr<UBehaviorTreeComponent> — компонент, который исполняет дерево поведения
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "AI")
 	TObjectPtr<UBlackboardComponent>BlackboardComponentRef;
 	// TObjectPtr<UBlackboardComponent> — компонент, который хранит Blackboard keys
 
+
+
+	// вызывается при обнаружении или потере цели
 public:
 	FORCEINLINE UBlackboardComponent* GetBlackboardComponentRef() const { return BlackboardComponentRef; }
 	// FORCEINLINE UBlackboardComponent* — быстрый getter Blackboard компонента

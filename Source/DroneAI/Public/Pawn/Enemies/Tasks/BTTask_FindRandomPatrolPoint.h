@@ -20,13 +20,15 @@ public:
 
 protected:
 
-	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
+	virtual EBTNodeResult::Type ExecuteTask(
+		UBehaviorTreeComponent& OwnerComp,
+		uint8* NodeMemory
+	) override;
 
-	UPROPERTY(EditAnywhere, Category = "AI")
-	float SearchRadius = 3000.f;
+public:
 
-	UPROPERTY(EditAnywhere, Category = "Blackboard")
-	FBlackboardKeySelector PatrolPointKey;
+	UPROPERTY(EditAnywhere, Category="AI")
+	float Radius = 1000.f;
 	
 	
 };

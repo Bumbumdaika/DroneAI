@@ -8,11 +8,14 @@
 #include "EnemyPawn.generated.h"
 
 
+struct FAIStimulus;
 /**
  * 
  */
 class AActor;
 class UHealthComponent;
+class UAIPerceptionComponent;
+class UAISenseConfig_Sight;
 
 UCLASS()
 class DRONEAI_API AEnemyPawn : public APawnBase, public ICombatInterface
@@ -62,6 +65,8 @@ protected:
 	float LoseTargetRadius = 2000.0f;
 	// float — дистанция, после которой враг теряет цель
 	
+protected:
+	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Componets")
 	TObjectPtr<UHealthComponent> HealthComponent;
 	// TObjectPtr<UHealthComponent> — компонент системы здоровья
@@ -70,11 +75,24 @@ protected:
 	TObjectPtr<AActor> TargetActor;
 	// TObjectPtr<AActor> — текущая цель врага
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+	TObjectPtr<UAIPerceptionComponent> PerceptionComponent;
+	// основной компонент системы восприятия AI
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+	TObjectPtr<UAISenseConfig_Sight> SightConfig;
+	// конфигурация зрения AI
 	
 	/*
 	Called when health reaches zero
 	Вызывается когда здоровье заканчивается
 	*/
+	
+protected:
+
+	UFUNCTION()
+	void OnPerceptionUpdated(AActor* Actor, FAIStimulus Stimulus);
+	// вызывается при обнаружении или потере цели
 	UFUNCTION()
 	void HandleDeath();
 	

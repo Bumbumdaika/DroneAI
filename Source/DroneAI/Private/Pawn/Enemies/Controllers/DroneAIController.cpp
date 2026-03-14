@@ -12,7 +12,7 @@ ADroneAIController::ADroneAIController()
 	BlackboardComponentRef = CreateDefaultSubobject<UBlackboardComponent>(TEXT("BlackboardComponentRef"));
 	// CreateDefaultSubobject<T>(...) — создает встроенный UObject-компонент актора
 
-	//BehaviorTreeComponentRef = CreateDefaultSubobject<UBehaviorTreeComponent>(TEXT("BehaviorTreeComponentRef"));
+	BehaviorTreeComponentRef = CreateDefaultSubobject<UBehaviorTreeComponent>(TEXT("BehaviorTreeComponentRef"));
 	// UBehaviorTreeComponent — исполняет узлы и логику Behavior Tree
 	
 }
