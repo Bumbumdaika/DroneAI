@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Enemies/Interfaces/CombatInterface.h"
 #include "Pawn/PawnBase.h"
 #include "EnemyPawn.generated.h"
 
@@ -14,13 +15,12 @@ class AActor;
 class UHealthComponent;
 
 UCLASS()
-class DRONEAI_API AEnemyPawn : public APawnBase
+class DRONEAI_API AEnemyPawn : public APawnBase, public ICombatInterface
 {
 	GENERATED_BODY()
 
 public:
 	AEnemyPawn();
-
 protected:
 	virtual void BeginPlay() override;
 
@@ -61,4 +61,23 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Enemy | AI")
 	float LoseTargetRadius = 2000.0f;
 	// float — дистанция, после которой враг теряет цель
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Componets")
+	TObjectPtr<UHealthComponent> HealthComponent;
+	// TObjectPtr<UHealthComponent> — компонент системы здоровья
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+	TObjectPtr<AActor> TargetActor;
+	// TObjectPtr<AActor> — текущая цель врага
+
+	
+	/*
+	Called when health reaches zero
+	Вызывается когда здоровье заканчивается
+	*/
+	UFUNCTION()
+	void HandleDeath();
+	
+public:
+	virtual void OnEnemyDeath_Implementation() override;
 };
