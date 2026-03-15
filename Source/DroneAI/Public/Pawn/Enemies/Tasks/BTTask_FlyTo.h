@@ -14,7 +14,26 @@ class DRONEAI_API UBTTask_FlyTo : public UBTTaskNode
 {
 	GENERATED_BODY()
 	
+public:
+	UBTTask_FlyTo();
 	
+protected: 
 	
-	
+protected:
+
+	virtual EBTNodeResult::Type ExecuteTask(
+		UBehaviorTreeComponent& OwnerComp,
+		uint8* NodeMemory
+	) override;
+
+	virtual void TickTask(
+		UBehaviorTreeComponent& OwnerComp,
+		uint8* NodeMemory,
+		float DeltaSeconds
+	) override;
+
+public:
+
+	UPROPERTY(EditAnywhere, Category="AI")
+	float AcceptanceRadius = 150.f;
 };
