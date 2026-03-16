@@ -6,6 +6,8 @@
 #include "AIController.h"
 #include "AIController05.generated.h"
 
+class UBehaviorTree;
+
 UCLASS()
 class DRONEAI_API AAIController05 : public AAIController
 {
@@ -16,10 +18,10 @@ public:
 	AAIController05();
 
 protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
+	
+	void OnPossess(APawn* aPawn) override;
+	
+	UPROPERTY(EditDefaultsOnly, Category = "AI")
+	UBehaviorTree* BehaviorTree;
 
-public:
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
 };

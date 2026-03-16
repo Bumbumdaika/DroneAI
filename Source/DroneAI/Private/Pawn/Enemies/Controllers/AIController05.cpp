@@ -2,7 +2,7 @@
 
 
 #include "Pawn/Enemies/Controllers/AIController05.h"
-
+#include "BehaviorTree/BehaviorTree.h"
 
 // Sets default values
 AAIController05::AAIController05()
@@ -11,16 +11,14 @@ AAIController05::AAIController05()
 	PrimaryActorTick.bCanEverTick = true;
 }
 
-// Called when the game starts or when spawned
-void AAIController05::BeginPlay()
+void AAIController05::OnPossess(APawn* aPawn)
 {
-	Super::BeginPlay();
-	
-}
-
-// Called every frame
-void AAIController05::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
+	if (BehaviorTree)
+	{
+		if (BehaviorTree)
+		{
+			RunBehaviorTree(BehaviorTree);
+		}
+	}
 }
 
