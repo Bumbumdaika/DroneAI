@@ -1,6 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "Pawn/Enemies/Tasks/BTTask_FlyTo.h"
 
 #include "AIController.h"
@@ -9,8 +6,9 @@
 UBTTask_FlyTo::UBTTask_FlyTo()
 {
 	NodeName = TEXT("Fly To");
-
 	bNotifyTick = true;
+	
+
 }
 
 EBTNodeResult::Type UBTTask_FlyTo::ExecuteTask(
@@ -28,37 +26,48 @@ void UBTTask_FlyTo::TickTask(
 )
 {
 	AAIController* AIController = OwnerComp.GetAIOwner();
-
 	if (!AIController)
 	{
+		UE_LOG(LogTemp, Warning, TEXT("BTTask_FlyTo: AIController null"));
 		FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
 		return;
 	}
 
 	APawn* Pawn = AIController->GetPawn();
-
 	if (!Pawn)
 	{
+		UE_LOG(LogTemp, Warning, TEXT("BTTask_FlyTo: Pawn null"));
 		FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
 		return;
 	}
 
 	UBlackboardComponent* Blackboard = OwnerComp.GetBlackboardComponent();
+	if (!Blackboard)
+	{
+		FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
+		return;
+	}
+	
+	if (!Blackboard)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("BTTask_FlyTo: Blackboard null"));
+		FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
+		return;
+	}
 
-	FVector TargetLocation = Blackboard->GetValueAsVector("TargetLocation");
+	const FVector TargetLocation = Blackboard->GetValueAsVector(TEXT("TargetLocation"));
+	const FVector CurrentLocation = Pawn->GetActorLocation();
 
-	FVector CurrentLocation = Pawn->GetActorLocation();
-
-	float Distance = FVector::Dist(CurrentLocation, TargetLocation);
+	const float Distance = FVector::Dist(CurrentLocation, TargetLocation);
 
 	if (Distance <= AcceptanceRadius)
 	{
+		UE_LOG(LogTemp, Warning, TEXT("BTTask_FlyTo: Reached target"));
 		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 		return;
 	}
 
-	FVector Direction = (TargetLocation - CurrentLocation).GetSafeNormal();
+	const FVector Direction = (TargetLocation - CurrentLocation).GetSafeNormal();
 
 	Pawn->AddMovementInput(Direction, 1.0f);
 }
-

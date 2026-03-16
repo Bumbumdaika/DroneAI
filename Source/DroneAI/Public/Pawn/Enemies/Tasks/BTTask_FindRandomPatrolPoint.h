@@ -29,6 +29,17 @@ public:
 
 	UPROPERTY(EditAnywhere, Category="AI")
 	float Radius = 1000.f;
+protected:
 	
 	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Drone|AI")
+	FVector HomeLocation;
+	// FVector — точка, вокруг которой дрон патрулирует
+	
+public:
+
+	FORCEINLINE FVector GetHomeLocation() const
+	{
+		return HomeLocation;
+	}
 };

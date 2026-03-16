@@ -31,5 +31,17 @@ public:
 	float AcceptanceRadius = 100.f;
 	//float - дистанция достижения цели. 
 	
+protected:
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Drone|AI")
+	FVector HomeLocation;
+	// FVector — точка, вокруг которой дрон патрулирует
+	
+public:
+
+	FORCEINLINE FVector GetHomeLocation() const
+	{
+		return HomeLocation;
+	}
+	// FORCEINLINE — просим компилятор встроить маленькую функцию напрямую
 };

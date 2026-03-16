@@ -11,4 +11,7 @@ ADronePawn::ADronePawn()
 void ADronePawn::BeginPlay()
 {
 	Super::BeginPlay();
+	
+	HomeLocation = GetActorLocation();
+	// GetActorLocation() — возвращает мировую позицию актора
 }
