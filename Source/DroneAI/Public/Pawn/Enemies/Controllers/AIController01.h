@@ -11,13 +11,17 @@
  */
 
 class UBehaviorTree;
+class UAIPerceptionComponent;
+//class UAISense_Sight;
+class UAISenseConfig_Sight;
 
 UCLASS()
 class DRONEAI_API AAIController01 : public AAIController
 {
 	GENERATED_BODY()
 	
-public: 
+public:
+	static const FName TargetActorKeyName;
 	AAIController01();
 	
 protected:
@@ -27,8 +31,17 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "AI")
 	UBehaviorTree* BehaviorTree;
 	
+	UPROPERTY(EditDefaultsOnly, Category = "AI")
+	UAIPerceptionComponent* AIPerceptionComponent ;
 	
+
+	UPROPERTY(EditDefaultsOnly, Category = "AI")
+	TObjectPtr<UAISenseConfig_Sight> SenseConfig_Sight;
 	
+	UFUNCTION()
+	void OnTargetPerceptionUpdated(AActor* Actor, FAIStimulus Stimulus);
 	
-	
+		
+	void SetTargetActor(AActor* NewTarget);
+	void ClearTargetActor();
 };

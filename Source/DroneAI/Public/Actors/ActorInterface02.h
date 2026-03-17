@@ -8,6 +8,7 @@
 #include "ActorInterface02.generated.h"
 
 class UStaticMeshComponent;
+class UHealthActorComponent03;
 
 UCLASS()
 class DRONEAI_API AActorInterface02 : public AActor, public IInterface02
@@ -24,7 +25,14 @@ protected:
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "SM")
 	UStaticMeshComponent* SM;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "HealthActorComponent03")
+	UHealthActorComponent03* HealthActorComponent03;
 
+public:
+	UFUNCTION()
+	void HandleChangedHealth(float NewHealth);
+	
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

@@ -3,6 +3,8 @@
 
 #include "Actors/ActorInterface02.h"
 
+#include "Pawn/Enemies/Components/HealthActorComponent03.h"
+
 
 // Sets default values
 AActorInterface02::AActorInterface02()
@@ -13,6 +15,7 @@ AActorInterface02::AActorInterface02()
 	SM=CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ActorMesh"));
 	SM->SetupAttachment(RootComponent);
 
+	HealthActorComponent03 = CreateDefaultSubobject<UHealthActorComponent03>(TEXT("HealthActorComponent03"));
 }
 
 // Called when the game starts or when spawned
@@ -20,6 +23,15 @@ void AActorInterface02::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	if (HealthActorComponent03)
+	{
+		HealthActorComponent03->OnHealthChanged03.AddDynamic(this, &AActorInterface02::HandleChangedHealth);
+	}
+}
+
+void AActorInterface02::HandleChangedHealth(float NewHealth)
+{
+	UE_LOG(LogTemp, Warning, TEXT("Health changed: %f"), NewHealth);
 }
 
 // Called every frame

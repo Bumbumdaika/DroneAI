@@ -8,16 +8,18 @@
 #include "Perception/AISenseConfig_Sight.h"
 #include "Perception/AISense_Sight.h"
 
+#include "Net/UnrealNetwork.h"
+
 AEnemyPawn::AEnemyPawn()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
 	bReplicates = true;
 	SetReplicateMovement(true);
-	
+
 	HealthComponent = CreateDefaultSubobject<UHealthComponent>(TEXT("HealthComponent"));
 	// CreateDefaultSubobject — создаёт компонент внутри актора
-	
+
 	/*
 AI Perception component
 */
@@ -72,12 +74,11 @@ void AEnemyPawn::BeginPlay()
 		HealthComponent->OnDeath.AddDynamic(this, &AEnemyPawn::HandleDeath);
 		// AddDynamic — подписка на multicast delegate
 	}
-	
 }
 
 
 bool AEnemyPawn::HasTarget() const
-{ 
+{
 	return IsValid(TargetActor);
 	// IsValid — безопасная проверка UObject
 }
@@ -124,4 +125,19 @@ void AEnemyPawn::OnEnemyDeath_Implementation()
 {
 	Destroy();
 	// Destroy — уничтожает актор
+}
+
+void AEnemyPawn::OnRep_CanSeeTarget()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Client received new vision state: %s"), bCanSeeTarget ? TEXT("TRUE") : TEXT("FALSE"));
+
+}
+
+void AEnemyPawn::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(AEnemyPawn, bCanSeeTarget);
+	DOREPLIFETIME(AEnemyPawn, TargetActor);
+	DOREPLIFETIME(AEnemyPawn, bCanSeeTarget);
 }

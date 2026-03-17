@@ -4,37 +4,31 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Pawn/Enemies/Interfaces/Interface03.h"
-#include "ActorInterface03.generated.h"
+#include "Pawn/Enemies/Interfaces/Interface06.h"
+#include "ActorInterface06.generated.h"
+
 
 class UStaticMeshComponent;
-class UHealthActorComponent04;
 
 UCLASS()
-class DRONEAI_API AActorInterface03 : public AActor, public IInterface03
+class DRONEAI_API AActorInterface06 : public AActor, public IInterface06
 {
 	GENERATED_BODY()
 
 public:
 	// Sets default values for this actor's properties
-	AActorInterface03();
+	AActorInterface06();
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "StaticMesh")
-	UStaticMeshComponent* StaticMeshComponent;
+	TObjectPtr<UStaticMeshComponent> StaticMesh;
 
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "HealthComponent04")
-	TObjectPtr<UHealthActorComponent04> HealthActorComponent04;
-	
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	
-	virtual void Interracte03_Implementation() override;
-	
-	UFUNCTION()
-	void HadndleHealthChange(float NewHealth);
+	virtual void Interract06_Implementation() override;
 };
