@@ -40,7 +40,6 @@ this,
 
 void AAIController01::OnPossess(APawn* aPawn)
 {
-	Super::OnPossess(aPawn);
 	
 	if (BehaviorTree)
 	{

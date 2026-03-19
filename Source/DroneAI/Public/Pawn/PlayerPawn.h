@@ -1,11 +1,8 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
 #include "Pawn/PawnBase.h"
 #include "PlayerPawn.generated.h"
-
 
 class UCameraComponent;
 class USpringArmComponent;
@@ -13,57 +10,51 @@ class UInputMappingContext;
 class UInputAction;
 struct FInputActionValue;
 
-
-/**
- * 
- */
 UCLASS()
 class DRONEAI_API APlayerPawn : public APawnBase
 {
 	GENERATED_BODY()
-	
+
 public:
 	APlayerPawn();
 
-	UFUNCTION(Server, Reliable)
-	void Server_Move(const FVector& Direction, float Scale);
-	
+	virtual void Tick(float DeltaTime) override;
+
 protected:
 	virtual void BeginPlay() override;
-	// Функция биндинга input
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
-	
+
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	TObjectPtr<USpringArmComponent> SpringArmComponent;
-	// TObjectPtr<USpringArmComponent> — держатель камеры на расстоянии от Pawn
-	// Камера на "палке" для плавного следования
-	
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	TObjectPtr<UCameraComponent> CameraComponent;
-	// TObjectPtr<UCameraComponent> — камера игрока
-	// Основная камера игрока
-protected:                              
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Inputs")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 	TObjectPtr<UInputMappingContext> DefaultMappingContext;
-	// TObjectPtr<UInputMappingContext> — набор правил привязки ввода
-	
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 	TObjectPtr<UInputAction> MoveAction;
-	// TObjectPtr<UInputAction> — действие движения вперед/вправо
-	
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input")
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 	TObjectPtr<UInputAction> LookAction;
-	// TObjectPtr<UInputAction> — действие поворота камеры мышью
-	
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input")
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 	TObjectPtr<UInputAction> MoveUpAction;
-	// TObjectPtr<UInputAction> — действие движения вверх/вниз
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Movement")
+	float MoveSpeed = 600.f;
 
 protected:
 	void Move(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
 	void MoveUp(const FInputActionValue& Value);
-	
+
+	UFUNCTION(Server, Unreliable)
+	void Server_SetMoveInput(const FVector2D& NewMoveInput, float NewUpInput);
+
+private:
+	FVector2D CachedMoveInput = FVector2D::ZeroVector;
+	float CachedUpInput = 0.f;
 };

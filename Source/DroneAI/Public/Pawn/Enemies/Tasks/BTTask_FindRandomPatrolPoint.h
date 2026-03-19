@@ -13,33 +13,22 @@ UCLASS()
 class DRONEAI_API UBTTask_FindRandomPatrolPoint : public UBTTaskNode
 {
 	GENERATED_BODY()
-	
-public:
 
+public:
 	UBTTask_FindRandomPatrolPoint();
 
 protected:
+	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
 
-	virtual EBTNodeResult::Type ExecuteTask(
-		UBehaviorTreeComponent& OwnerComp,
-		uint8* NodeMemory
-	) override;
+	UPROPERTY(EditAnywhere, Category = "AI")
+	float RadiusXY = 1000.0f;
 
-public:
+	UPROPERTY(EditAnywhere, Category = "AI")
+	float RadiusZ = 300.0f;
 
-	UPROPERTY(EditAnywhere, Category="AI")
-	float Radius = 1000.f;
-protected:
-	
-	
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Drone|AI")
-	FVector HomeLocation;
-	// FVector — точка, вокруг которой дрон патрулирует
-	
-public:
+	UPROPERTY(EditAnywhere, Category = "AI")
+	float MinDistance = 300.0f;
 
-	FORCEINLINE FVector GetHomeLocation() const
-	{
-		return HomeLocation;
-	}
+	UPROPERTY(EditAnywhere, Category = "Blackboard")
+	FBlackboardKeySelector TargetLocationKey;
 };

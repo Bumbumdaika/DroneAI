@@ -6,7 +6,7 @@
 
 UBTTask_FindRandomPatrolPoint::UBTTask_FindRandomPatrolPoint()
 {
-	NodeName = TEXT("Find Random Patrol Point");
+	NodeName = TEXT("Find Random Point");
 }
 
 EBTNodeResult::Type UBTTask_FindRandomPatrolPoint::ExecuteTask(
@@ -17,38 +17,57 @@ EBTNodeResult::Type UBTTask_FindRandomPatrolPoint::ExecuteTask(
 	AAIController* AIController = OwnerComp.GetAIOwner();
 	if (!AIController)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("BTTask_FindRandomPatrolPoint: AIController null"));
+		UE_LOG(LogTemp, Warning, TEXT("BTTask_FindRandomPoint3D: AIController is null"));
 		return EBTNodeResult::Failed;
 	}
 
-	ADronePawn* DronePawn = Cast<ADronePawn>(AIController->GetPawn());
-	if (!DronePawn)
+	APawn* ControlledPawn = AIController->GetPawn();
+	if (!ControlledPawn)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("BTTask_FindRandomPatrolPoint: DronePawn null"));
+		UE_LOG(LogTemp, Warning, TEXT("BTTask_FindRandomPoint3D: ControlledPawn is null"));
 		return EBTNodeResult::Failed;
 	}
 
-	UBlackboardComponent* Blackboard = OwnerComp.GetBlackboardComponent();
-	if (!Blackboard)
+	UBlackboardComponent* BlackboardComp = OwnerComp.GetBlackboardComponent();
+	if (!BlackboardComp)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("BTTask_FindRandomPatrolPoint: Blackboard null"));
+		UE_LOG(LogTemp, Warning, TEXT("BTTask_FindRandomPoint3D: BlackboardComp is null"));
 		return EBTNodeResult::Failed;
 	}
 
-	const FVector Origin = DronePawn->GetHomeLocation();
-	// Берем не текущую позицию, а домашнюю точку патруля
+	const FVector Origin = ControlledPawn->GetActorLocation();
 
-	const FVector RandomOffset(
-		FMath::FRandRange(-Radius, Radius),
-		FMath::FRandRange(-Radius, Radius),
-		FMath::FRandRange(-Radius * 0.5f, Radius * 0.5f)
-	);
+	FVector RandomOffset;
+	FVector TargetLocation;
+	bool bFoundValidPoint = false;
 
-	const FVector TargetLocation = Origin + RandomOffset;
+	for (int32 Attempt = 0; Attempt < 10; ++Attempt)
+	{
+		RandomOffset = FVector(
+			FMath::FRandRange(-RadiusXY, RadiusXY),
+			FMath::FRandRange(-RadiusXY, RadiusXY),
+			FMath::FRandRange(-RadiusZ, RadiusZ)
+		);
 
-	Blackboard->SetValueAsVector(TEXT("TargetLocation"), TargetLocation);
+		if (RandomOffset.Size() < MinDistance)
+		{
+			continue;
+		}
 
-	UE_LOG(LogTemp, Warning, TEXT("BTTask_FindRandomPatrolPoint: New patrol point = %s"), *TargetLocation.ToString());
+		TargetLocation = Origin + RandomOffset;
+		bFoundValidPoint = true;
+		break;
+	}
+
+	if (!bFoundValidPoint)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("BTTask_FindRandomPoint3D: Failed to find valid random point"));
+		return EBTNodeResult::Failed;
+	}
+
+	BlackboardComp->SetValueAsVector(TargetLocationKey.SelectedKeyName, TargetLocation);
+
+	UE_LOG(LogTemp, Log, TEXT("BTTask_FindRandomPoint3D: TargetLocation = %s"), *TargetLocation.ToString());
 
 	return EBTNodeResult::Succeeded;
 }

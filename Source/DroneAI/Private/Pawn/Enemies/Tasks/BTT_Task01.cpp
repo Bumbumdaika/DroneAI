@@ -3,10 +3,15 @@
 
 #include "Pawn/Enemies/Tasks/BTT_Task01.h"
 #include "AIController.h"
+#include "BehaviorTree/BlackboardComponent.h"
+#include "GameFramework/Pawn.h"
 
 UBTT_Task01::UBTT_Task01()
 {
-	NodeName = "BTT_Task01";
+	NodeName = TEXT("Fly To");
+	bNotifyTick = true;
+
+
 	
 }
 
